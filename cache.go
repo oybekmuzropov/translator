@@ -54,21 +54,30 @@ func (c *cache) Translate(ctx context.Context, from, to language.Tag, data strin
 			return "", err
 		}
 
-		err = c.cache.Set(ctx, key, result, c.duration).Err()
-		if err != nil {
-			return "", err
-		}
-
-		reverseKey := generateKey(to, from, result)
-		err = c.cache.Set(ctx, reverseKey, data, c.duration).Err()
+		err = c.set(ctx, from, to, data, result)
 		if err != nil {
 			return "", err
 		}
 
 		return result, nil
 	} else if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "failed while getting from cache")
 	}
 
 	return val, nil
+}
+
+func (c *cache) set(ctx context.Context, from, to language.Tag, data, result string) error {
+	key := generateKey(from, to, data)
+	err := c.cache.Set(ctx, key, result, c.duration).Err()
+	if err != nil {
+		return errors.Wrap(err, "failed while writing cache")
+	}
+
+	reverseKey := generateKey(to, from, result)
+	err = c.cache.Set(ctx, reverseKey, data, c.duration).Err()
+	if err != nil {
+		return errors.Wrap(err, "failed while writing cache")
+	}
+	return nil
 }

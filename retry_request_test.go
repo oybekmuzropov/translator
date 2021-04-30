@@ -41,8 +41,6 @@ func TestRetry_TranslateWithNoError(t *testing.T) {
 	result, err := retryTranslator.Translate(ctx, from, to, data)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResult, result)
-
-	mockTranslator.AssertExpectations(t)
 }
 
 func TestRetry_TranslateWithError(t *testing.T) {
@@ -63,6 +61,4 @@ func TestRetry_TranslateWithError(t *testing.T) {
 	result, err := retryTranslator.Translate(ctx, from, to, data)
 	assert.ErrorIs(t, err, wrongTranslation)
 	assert.Empty(t, result)
-
-	mockTranslator.AssertExpectations(t)
 }
