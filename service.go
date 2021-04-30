@@ -25,7 +25,13 @@ func NewService() *Service {
 		os.Exit(1)
 	}
 
+	cacheTranslator, err := newCache(retryTranslator, config)
+	if err != nil {
+		fmt.Printf("cacheTranslator failed: %+v\n\n", err)
+		os.Exit(1)
+	}
+
 	return &Service{
-		translator: retryTranslator,
+		translator: cacheTranslator,
 	}
 }
