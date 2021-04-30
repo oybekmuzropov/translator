@@ -1,6 +1,10 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"os"
+	"time"
+)
 
 // Service is a Translator user.
 type Service struct {
@@ -13,8 +17,15 @@ func NewService() *Service {
 		500*time.Millisecond,
 		0.1,
 	)
+	config := loadConfig()
+
+	retryTranslator, err := newRetry(t, config)
+	if err != nil {
+		fmt.Printf("retryTranslator failed: %+v\n\n", err)
+		os.Exit(1)
+	}
 
 	return &Service{
-		translator: t,
+		translator: retryTranslator,
 	}
 }

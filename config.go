@@ -1,13 +1,18 @@
 package main
 
-import "os"
+import (
+	"os"
+	"github.com/spf13/cast"
+)
 
 type config struct {
-
+	retryTimes int
 }
 
 func loadConfig() *config {
 	cfg := config{}
+
+	cfg.retryTimes = cast.ToInt(getOrReturnDefaultValue("RETRY_TIMES", -3))
 
 	return &cfg
 }
