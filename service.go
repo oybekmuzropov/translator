@@ -31,9 +31,13 @@ func NewService() *Service {
 		os.Exit(1)
 	}
 
-	// I couldn't implement third task
+	deduplicateTranslator, err := newDeduplicate(cacheTranslator)
+	if err != nil {
+		fmt.Printf("deduplicateTranslator failed: %+v\n\n", err)
+		os.Exit(1)
+	}
 
 	return &Service{
-		translator: cacheTranslator,
+		translator: deduplicateTranslator,
 	}
 }
