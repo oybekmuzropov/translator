@@ -31,6 +31,8 @@ func NewService() *Service {
 		os.Exit(1)
 	}
 
+	// I couldn't implement third task
+
 	return &Service{
 		translator: cacheTranslator,
 	}
